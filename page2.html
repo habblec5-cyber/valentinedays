@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOVE.EXE — Initializing...</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  height:100vh;
+  background:#000;
+  color:#ff5fa2;
+  font-family:'Orbitron', monospace;
+  overflow:hidden;
+}
+
+.glow-bg{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at top, rgba(255,90,150,.15), transparent 60%),
+    radial-gradient(circle at bottom, rgba(255,90,150,.12), transparent 60%);
+  pointer-events:none;
+}
+
+.container{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:5vw;
+}
+
+.terminal{
+  font-size:clamp(12px,2vw,16px);
+  line-height:1.8;
+  opacity:.85;
+}
+
+.progress-wrap{
+  margin-top:20px;
+  height:6px;
+  width:100%;
+  background:#111;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff3d81,#ff7ad9);
+  box-shadow:0 0 20px #ff5fa2;
+  transition:.2s;
+}
+
+.glitch{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  mix-blend-mode:screen;
+  animation:glitchFlash 4s infinite;
+}
+
+@keyframes glitchFlash{
+  0%,95%,100%{opacity:0}
+  96%{opacity:.2}
+  97%{opacity:0}
+  98%{opacity:.3}
+  99%{opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow-bg"></div>
+
+<div class="container">
+  <div class="terminal" id="terminal"></div>
+  <div class="progress-wrap">
+    <div class="progress" id="progress"></div>
+  </div>
+</div>
+
+<div class="glitch"></div>
+
+<script>
+const terminal = document.getElementById("terminal");
+const progress = document.getElementById("progress");
+
+const logs = [
+  "initializing LOVE.EXE...",
+  "loading emotional core...",
+  "decrypting memory fragments...",
+  "checking heartbeat protocol...",
+  "injecting chaos module...",
+  "synchronizing feelings...",
+  "calibrating love frequency...",
+  "almost ready..."
+];
+
+let line = 0;
+let percent = 0;
+
+function typeLine(text){
+  let i = 0;
+  const p = document.createElement("div");
+  terminal.appendChild(p);
+
+  const typing = setInterval(() => {
+    p.textContent += text[i];
+    i++;
+    if(i >= text.length){
+      clearInterval(typing);
+    }
+  }, 25);
+}
+
+function runSystem(){
+  if(line < logs.length){
+    typeLine("> " + logs[line]);
+    line++;
+  }
+
+  percent += Math.random()*12;
+  progress.style.width = Math.min(percent,100) + "%";
+
+  if(percent >= 100){
+    setTimeout(() => {
+      terminal.innerHTML += "<br><span style='color:#ff8dcf'>SYSTEM READY.</span>";
+      setTimeout(() => {
+        window.location.href = "page3.html";
+      }, 1200);
+    }, 800);
+    clearInterval(loop);
+  }
+}
+
+const loop = setInterval(runSystem, 500);
+</script>
+
+</body>
+</html>

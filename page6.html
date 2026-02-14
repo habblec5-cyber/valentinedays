@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 6 — Emotional Peak</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#000;color:#fff;overflow:hidden}
+
+/* BACKGROUND */
+.bg{
+  position:fixed;inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,0,150,.22), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,0,200,.18), transparent 45%),
+    linear-gradient(135deg,#000,#06000a,#000);
+  animation:moveBg 12s infinite alternate;
+}
+
+@keyframes moveBg{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(40deg)}
+}
+
+/* FLOAT */
+.hearts span{
+  position:absolute;
+  font-size:12px;
+  animation:float 7s linear infinite;
+  opacity:.7;
+}
+
+@keyframes float{
+  from{transform:translateY(110vh) scale(.4);opacity:0}
+  to{transform:translateY(-10vh) scale(1);opacity:1}
+}
+
+/* MAIN */
+.wrap{
+  position:relative;
+  z-index:3;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+
+.box{max-width:500px;width:100%}
+
+.text{
+  font-size:22px;
+  line-height:1.6;
+  opacity:0;
+  animation:fade .8s forwards;
+}
+
+@keyframes fade{to{opacity:1}}
+
+/* EMOTION CARD */
+.card{
+  margin-top:20px;
+  padding:22px;
+  border-radius:18px;
+  background:rgba(255,0,150,.12);
+  border:1px solid rgba(255,0,200,.5);
+  box-shadow:0 0 30px rgba(255,0,200,.6);
+  font-size:18px;
+  animation:pop .5s ease;
+}
+
+@keyframes pop{
+  0%{transform:scale(.6);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
+
+.tap{
+  margin-top:12px;
+  font-size:12px;
+  opacity:.7;
+  color:#ff8bd8;
+}
+
+/* HEART MODE */
+.heartMode{display:none;margin-top:20px}
+
+.heart{
+  font-size:75px;
+  animation:beat 1s infinite;
+}
+
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.25)}
+}
+
+.meter{
+  margin:20px auto 0;
+  width:100%;
+  height:14px;
+  border-radius:12px;
+  border:1px solid #ff2aa6;
+  overflow:hidden;
+}
+
+.fill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#ff0077,#ff66cc);
+  transition:.15s;
+}
+
+/* NEXT */
+.nextBtn{
+  display:none;
+  margin-top:30px;
+  padding:12px 28px;
+  border-radius:25px;
+  border:none;
+  background:#ff0077;
+  color:#fff;
+  font-size:14px;
+  box-shadow:0 0 20px rgba(255,0,200,.8);
+  cursor:pointer;
+  animation:glow 1.4s infinite alternate;
+}
+
+@keyframes glow{
+  to{box-shadow:0 0 35px rgba(255,0,200,1)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="hearts" id="hearts"></div>
+
+<div class="wrap">
+  <div class="box">
+
+    <div id="text" class="text"></div>
+
+    <div id="emotionBox" style="display:none">
+      <div class="card" id="card"></div>
+      <div class="tap">tap pelan ya 💗</div>
+    </div>
+
+    <div id="heartMode" class="heartMode">
+      <div class="heart">💓</div>
+      <p>sinkronin detak kita...</p>
+      <div class="meter"><div class="fill" id="fill"></div></div>
+    </div>
+
+    <button id="nextBtn" class="nextBtn">NEXT ➝</button>
+
+  </div>
+</div>
+
+<audio id="beat" src="https://cdn.pixabay.com/audio/2023/03/07/audio_2b87e62e5c.mp3"></audio>
+<audio id="tap" src="https://cdn.pixabay.com/audio/2022/03/15/audio_11b66f0b47.mp3"></audio>
+
+<script>
+/* FLOAT PARTICLES */
+for(let i=0;i<30;i++){
+  let h=document.createElement('span');
+  h.innerText=['💗','💖','✨','💞'][Math.floor(Math.random()*4)];
+  h.style.left=Math.random()*100+'vw';
+  h.style.animationDuration=(5+Math.random()*6)+'s';
+  document.getElementById('hearts').appendChild(h);
+}
+
+/* OPENING PLAYFUL TEASE */
+const intro=[
+ "eh… masih di sini? 😏",
+ "kirain udah capek loh…",
+ "ternyata masih penasaran yaa?.",
+ "yaudah…",
+ "kita santai dikit ",
+ "",
+ "pasti kamu pernah ngerasa gini kan…",
+ "apalagi kalo lagi deket sama seseorang…",
+ "atau lagi falling in love tanpa sadar."
+];
+
+let i=0;
+const text=document.getElementById('text');
+const emotionBox=document.getElementById('emotionBox');
+
+function typing(){
+  text.innerHTML=intro[i];
+  text.style.animation='none';
+  text.offsetHeight;
+  text.style.animation='fade .8s forwards';
+  i++;
+  if(i<intro.length){
+    setTimeout(typing,1700);
+  }else{
+    setTimeout(()=>{
+      text.style.display='none';
+      emotionBox.style.display='block';
+      showEmotion();
+    },1800);
+  }
+}
+typing();
+
+/* SHARED EMOTION MODE */
+const emotions=[
+ "Deg-degan tiap ada notif masuk 🫀",
+ "Senyum sendiri sambil natap layar 🤍",
+ "Nunggu balasan… padahal baru 2 detik 😭",
+ "Overthinking sebelum tidur",
+ "Berharap, tapi pura-pura biasa aja"
+];
+
+let e=0;
+const card=document.getElementById('card');
+
+function showEmotion(){
+  card.innerHTML=emotions[e];
+  document.getElementById('tap').play();
+}
+
+emotionBox.onclick=()=>{
+  e++;
+  if(e<emotions.length){
+    showEmotion();
+  }else{
+    emotionBox.style.display='none';
+    emotionalBuild();
+  }
+}
+
+/* BUILD UP — TENGIL */
+function emotionalBuild(){
+  text.style.display='block';
+  text.innerHTML="WKWKWK…<br>dasar korban backburner,<br>beda agama,<br>virtual relationship,<br>love boombing";
+  setTimeout(startHeartMode,3200);
+}
+
+/* HEART ATTACK MODE */
+let power=0;
+const heartMode=document.getElementById('heartMode');
+const fill=document.getElementById('fill');
+const beat=document.getElementById('beat');
+
+function startHeartMode(){
+  text.style.display='none';
+  heartMode.style.display='block';
+}
+
+heartMode.onclick=()=>{
+  power+=10;
+  fill.style.width=power+'%';
+  beat.currentTime=0;
+  beat.play();
+
+  if(power>=100){
+    heartMode.style.display='none';
+    afterEffect();
+  }
+}
+
+/* AFTER EFFECT */
+function afterEffect(){
+  text.style.display='block';
+  text.innerHTML="tapi yaa…<br>selama masih bisa,<br>berarti masih layak diperjuangin 🤍<br><br>siap ke kejutan terakhir? 😈";
+  document.getElementById('nextBtn').style.display='inline-block';
+}
+
+document.getElementById('nextBtn').onclick=()=>{
+  location.href='page7.html';
+}
+</script>
+
+</body>
+</html>

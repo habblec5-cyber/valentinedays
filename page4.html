@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOVE.EXE — CHAOS MODE</title>
+
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{
+  margin:0;
+  background:#000;
+  overflow:hidden;
+  color:#fff;
+}
+
+/* ELEGANT BACKGROUND */
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,70,160,.35), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,0,110,.35), transparent 45%),
+    linear-gradient(135deg,#000,#050008,#000);
+  animation:elegantMove 12s ease-in-out infinite alternate;
+  filter:blur(18px) saturate(130%);
+}
+
+@keyframes elegantMove{
+  0%{background-position:0% 0%,100% 100%,0% 0%}
+  50%{background-position:100% 50%,0% 50%,100% 100%}
+  100%{background-position:0% 100%,100% 0%,0% 0%}
+}
+
+/* SCREEN */
+.screen{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+}
+
+.hidden{display:none}
+
+h1{
+  color:#ff2f92;
+  text-shadow:0 0 20px #ff2f92;
+  margin:10px 0;
+}
+
+/* GAME 1 */
+.love{
+  position:absolute;
+  font-size:2.2rem;
+  cursor:pointer;
+  animation:float 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes float{
+  from{transform:translateY(0)}
+  to{transform:translateY(-25px)}
+}
+
+.counter{
+  position:absolute;
+  top:20px;
+  font-size:1.3rem;
+  color:#ff5fa9;
+}
+
+/* GAME 2 */
+.big-heart{
+  font-size:6rem;
+  animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.25)}
+  100%{transform:scale(1)}
+}
+
+.bar-wrap{
+  width:75%;
+  height:26px;
+  border:2px solid #ff2f92;
+  margin-top:25px;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 0 20px #ff2f92;
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#ff2f92,#ff74b5);
+  transition:.08s;
+}
+
+/* GLITCH */
+.glitch{
+  animation:glitch .15s infinite;
+}
+@keyframes glitch{
+  0%{transform:translate(0)}
+  25%{transform:translate(4px,-4px)}
+  50%{transform:translate(-4px,4px)}
+  75%{transform:translate(3px,3px)}
+  100%{transform:translate(0)}
+}
+
+/* FLASH */
+.flash{
+  position:fixed;
+  inset:0;
+  background:#fff;
+  z-index:99;
+  animation:flash .6s forwards;
+}
+@keyframes flash{
+  0%{opacity:1}
+  100%{opacity:0}
+}
+
+/* EMOJI EXPLOSION */
+.emoji{
+  position:absolute;
+  font-size:2rem;
+  animation:explode 2s ease-out forwards;
+}
+@keyframes explode{
+  from{transform:translate(0,0) scale(1)}
+  to{transform:translate(var(--x),var(--y)) scale(.6);opacity:0}
+}
+
+/* SHAKE */
+.shake{
+  animation:shake .25s;
+}
+@keyframes shake{
+  0%{transform:translate(0)}
+  25%{transform:translate(6px,-6px)}
+  50%{transform:translate(-6px,6px)}
+  75%{transform:translate(5px,5px)}
+  100%{transform:translate(0)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<!-- GAME 1 -->
+<div class="screen" id="game1">
+  <h1>CATCH THE LOVE</h1>
+  <div class="counter">💖 Tertangkap: <span id="score">0</span></div>
+</div>
+
+<!-- GAME 2 -->
+<div class="screen hidden" id="game2">
+  <h1>EMOTION METER SMASH</h1>
+  <div class="big-heart">💗</div>
+  <div class="bar-wrap"><div class="bar" id="bar"></div></div>
+</div>
+
+<!-- GLITCH -->
+<div class="screen hidden" id="glitch">
+  <h1 class="glitch">SYSTEM ERROR</h1>
+  <p class="glitch">Emotion Overload...</p>
+</div>
+
+<!-- BOOM -->
+<div class="screen hidden" id="boom">
+  <h1>💥</h1>
+</div>
+
+<script>
+let score=0;
+const game1=document.getElementById('game1');
+const game2=document.getElementById('game2');
+const glitch=document.getElementById('glitch');
+const boom=document.getElementById('boom');
+
+/* GAME 1 */
+function spawnLove(){
+  const love=document.createElement('div');
+  love.className='love';
+  love.textContent='💖';
+  love.style.left=Math.random()*90+'%';
+  love.style.top=Math.random()*80+'%';
+  love.onclick=()=>{
+    score++;
+    document.getElementById('score').textContent=score;
+    love.remove();
+    document.body.classList.add('shake');
+    setTimeout(()=>document.body.classList.remove('shake'),200);
+  }
+  game1.appendChild(love);
+  setTimeout(()=>love.remove(),2000);
+}
+
+let g1=setInterval(spawnLove,280);
+
+setTimeout(()=>{
+  clearInterval(g1);
+  game1.classList.add('hidden');
+  startGame2();
+},10000);
+
+/* GAME 2 */
+let meter=0;
+function startGame2(){
+  game2.classList.remove('hidden');
+
+  game2.onclick=()=>{
+    meter+=4;
+    if(meter>100) meter=100;
+    document.getElementById('bar').style.width=meter+'%';
+    document.body.classList.add('shake');
+    setTimeout(()=>document.body.classList.remove('shake'),150);
+  }
+
+  let chaos=setInterval(()=>{
+    if(meter>=100){
+      clearInterval(chaos);
+      endGame2();
+    }
+  },100);
+
+  setTimeout(()=>endGame2(),10000);
+}
+
+function endGame2(){
+  game2.classList.add('hidden');
+  glitch.classList.remove('hidden');
+
+  setTimeout(()=>{
+    glitch.classList.add('hidden');
+    triggerBoom();
+  },7000);
+}
+
+/* BOOM + GIFT EXPLOSION */
+function triggerBoom(){
+  boom.classList.remove('hidden');
+
+  const flash=document.createElement('div');
+  flash.className='flash';
+  document.body.appendChild(flash);
+
+  let burst=setInterval(()=>{
+    for(let i=0;i<25;i++){
+      const e=document.createElement('div');
+      e.className='emoji';
+      e.textContent=['💖','🧸','🌸','✨','💗'][Math.floor(Math.random()*5)];
+      e.style.left='50%';
+      e.style.top='50%';
+      e.style.setProperty('--x',(Math.random()*900-450)+'px');
+      e.style.setProperty('--y',(Math.random()*700-350)+'px');
+      document.body.appendChild(e);
+      setTimeout(()=>e.remove(),2000);
+    }
+  },300);
+
+  setTimeout(()=>{
+    clearInterval(burst);
+    location.href='page5.html';
+  },7000);
+}
+</script>
+
+</body>
+</html>

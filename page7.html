@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final 💗</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins', sans-serif;
+}
+
+body{
+  background:radial-gradient(circle at top, #18001f, #000);
+  min-height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+}
+
+/* CREDIT */
+.credit{
+  position:fixed;
+  top:12px;
+  right:15px;
+  font-size:.8em;
+  opacity:.85;
+  cursor:pointer;
+  padding:6px 14px;
+  border:1px solid #ff33aa66;
+  border-radius:20px;
+  background:#00000055;
+  backdrop-filter:blur(6px);
+  transition:.3s;
+  z-index:20;
+}
+.credit:hover{
+  opacity:1;
+  color:#ff66cc;
+  box-shadow:0 0 15px #ff33aa;
+}
+
+/* MAIN */
+.container{
+  text-align:center;
+  width:90%;
+  max-width:500px;
+  animation:fadeIn 1.2s ease;
+}
+
+h1{
+  font-size:2.1em;
+  color:#ff66cc;
+  text-shadow:0 0 15px #ff33aa;
+}
+
+.flashback{
+  margin:25px 0;
+  font-size:1.05em;
+  min-height:55px;
+}
+
+.message{
+  font-size:1em;
+  line-height:1.7;
+  margin:25px 0;
+}
+
+button{
+  background:#ff33aa;
+  border:none;
+  padding:14px 40px;
+  border-radius:40px;
+  font-size:1em;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 0 18px #ff33aa;
+  transition:0.3s;
+}
+button:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 30px #ff66cc;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(15px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* BOOM */
+.boom{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:10;
+}
+
+.boom h2{
+  font-size:2.5em;
+  color:#ff66cc;
+  text-shadow:0 0 25px #ff33aa;
+  animation:pulse 1s infinite alternate;
+}
+
+@keyframes pulse{
+  from{transform:scale(1);}
+  to{transform:scale(1.1);}
+}
+
+.heart{
+  position:absolute;
+  color:#ff33aa;
+  animation:float 3s linear infinite;
+}
+
+@keyframes float{
+  from{transform:translateY(0) scale(1); opacity:1;}
+  to{transform:translateY(-120vh) scale(1.4); opacity:0;}
+}
+
+/* GIFT */
+.giftBox{
+  margin-top:20px;
+  font-size:60px;
+  cursor:pointer;
+  animation:shake 1.5s infinite;
+}
+
+@keyframes shake{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(4deg)}
+  75%{transform:rotate(-4deg)}
+}
+
+.prank{
+  display:none;
+  text-align:center;
+  animation:fadeIn .6s;
+}
+
+.prank img{
+  width:180px;
+  border-radius:16px;
+  box-shadow:0 0 20px #ff33aa;
+  margin-bottom:15px;
+}
+
+.replay{
+  margin-top:25px;
+  font-size:.9em;
+  opacity:.8;
+  cursor:pointer;
+  transition:.3s;
+  display:none;
+}
+.replay:hover{
+  opacity:1;
+  color:#ff66cc;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="credit" onclick="openTelegram()">web by Nassiee</div>
+
+<div class="container" id="main">
+  <h1>Finally... 💫</h1>
+
+  <div class="flashback" id="flash"></div>
+
+  <div class="message">
+    Entah ini cuma web kecil...  
+    yang aku iseng bikin buat jomblo yg g punya pasyall  
+    <br><br>
+    Tapi semoga, selama kamu di sini,  
+    ada senyum yang sempat mampir.  
+    <br><br>
+    Karena walaupun kamu jomblo, kamu pantas dapet hal manis hari ini 💕
+  </div>
+
+  <button onclick="boom()">💖 Finish This Journey</button>
+</div>
+
+<div class="boom" id="boom">
+  <h2 id="boomText">Happy Valentine 💖</h2>
+
+  <div class="giftBox" id="gift" onclick="openGift()">🎁</div>
+
+  <div class="prank" id="prank">
+    <img src="WhatsApp Image 2026-02-14 at 18.29.13.jpeg" alt="cat">
+    <div>tapi boong wleee 😝</div>
+  </div>
+
+  <div class="replay" id="replay" onclick="restart()">🔁 ulang dari awal</div>
+</div>
+
+<script>
+const flashTexts=[
+  "Chaos 😈",
+  "Mini Game 🎮",
+  "Coret-coret 🎨",
+  "Shared 🤍",
+  "Semua ketemu di sini ✨"
+]
+
+let i=0
+const flash=document.getElementById("flash")
+
+function playFlash(){
+  if(i<flashTexts.length){
+    flash.innerHTML=flashTexts[i]
+    i++
+    setTimeout(playFlash,1000)
+  }
+}
+playFlash()
+
+function boom(){
+  document.getElementById("main").style.display="none"
+  document.getElementById("boom").style.display="flex"
+
+  setInterval(()=>{
+    const heart=document.createElement("div")
+    heart.className="heart"
+    heart.innerHTML="💗"
+    heart.style.left=Math.random()*100+"vw"
+    heart.style.fontSize=Math.random()*22+14+"px"
+    document.body.appendChild(heart)
+    setTimeout(()=>heart.remove(),3000)
+  },80)
+}
+
+function openGift(){
+  document.getElementById("gift").style.display="none"
+  document.getElementById("prank").style.display="block"
+
+  setTimeout(()=>{
+    document.getElementById("prank").style.display="none"
+    document.getElementById("boomText").innerHTML="Happy Valentine 💖"
+    document.getElementById("replay").style.display="block"
+  },2500)
+}
+
+function restart(){
+  window.location.href="index.html"
+}
+
+function openTelegram(){
+  window.open("https://t.me/Otoriteru","_blank")
+}
+</script>
+
+</body>
+</html>
